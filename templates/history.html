@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flight History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f7fb;
+            color: #222;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            margin-top: 0;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e8e8e8;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #0f4c81;
+            color: white;
+        }
+        tr:hover {
+            background: #f9fbfe;
+        }
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            text-decoration: none;
+            background: #0f4c81;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #0b3b64;
+        }
+        .small {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div>
+                <h1>Flight History</h1>
+                <div class="small">Saved flights, route details, weather status, and delay prediction</div>
+            </div>
+            <a class="btn" href="/">Back to Dashboard</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Date/Time</th>
+                    <th>Flight No</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Route</th>
+                    <th>Total Km</th>
+                    <th>Weather Status</th>
+                    <th>Delay Prediction</th>
+                </tr>
+            </thead>
+            <tbody id="historyBody">
+                <tr>
+                    <td colspan="8" class="empty">Loading history...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadHistory() {
+            const tbody = document.getElementById("historyBody");
+
+            try {
+                const response = await fetch("/api/logs");
+                const data = await response.json();
+
+                if (!data.length) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="empty">No flight history found.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = data.map(item => `
+                    <tr>
+                        <td>${item.created_at || ""}</td>
+                        <td>${item.flight_no || ""}</td>
+                        <td>${item.origin || ""}</td>
+                        <td>${item.destination || ""}</td>
+                        <td>${item.route || ""}</td>
+                        <td>${item.total_km || ""}</td>
+                        <td>${item.weather_status || ""}</td>
+                        <td>${item.delay_prediction || ""}</td>
+                    </tr>
+                `).join("");
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="8" class="empty">Error loading history.</td></tr>`;
+                console.error(error);
+            }
+        }
+
+        loadHistory();
+    </script>
+</body>
+</html>

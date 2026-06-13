@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aviation Operations Dashboard</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <h1 class="brand">✈ Aviation Dashboard</h1>
+            <div id="clock" class="clock">--:--:--</div>
+
+            <a href="/history" class="link-btn">Flight History</a>
+
+            <section class="panel">
+                <h2>Live Flights</h2>
+                <div id="liveFlights" class="list"></div>
+                <div class="card">
+                   <h2>Route Result</h2>
+
+                  <div id="route-result">
+                     No route selected.
+                  </div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <h2>Runway Management</h2>
+                <div id="runways" class="list"></div>
+            </section>
+
+            <section class="panel">
+                <h2>Flight Logs</h2>
+                <div id="flightLogs" class="list"></div>
+            </section>
+        </aside>
+
+        <main class="map-area">
+            <div id="map"></div>
+
+            <div class="map-legend">
+                <span class="green-dot"></span> Safe
+                <span class="yellow-dot"></span> Moderate
+                <span class="red-dot"></span> Severe
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
